@@ -84,7 +84,7 @@ function revive(v) {
   if (rdate.test(v)) return stod(v);
   if ('undefined' === v) return undefined;
   if ('/' == v[0] && rregexp.test(v)) return stor(v);
-  if ('function' == v.slice(0, 8) && '}' == v[v.length - 1] && isfn(v)) return stof(v);
+  if ('}' == v[v.length - 1] && isfn(v)) return stof(v);
   return v;
 }
 
@@ -141,7 +141,7 @@ function stof(str) {
 function isfn(str) {
   try {
     var obj = acorn.parse('(' + str + ')');
-    return obj.body[0].expression.type == 'FunctionExpression';
+    return obj.body[0].expression.type == 'FunctionExpression' || obj.body[0].expression.type == 'ArrowFunctionExpression';
   } catch (e) {
     throw new SyntaxError('"' + str + '" is not a function')
   }
